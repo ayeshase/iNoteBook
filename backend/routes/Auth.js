@@ -49,12 +49,12 @@ secPass = await  bcrypt.hash(req.body.password, salt)
 
 }   catch( error  ){
     console.error(error.message)
-    res.status(500).send("some Error occured")
+    res.status(500).send("Internal server error")
 }
 
 })
 //authenticate a User using: POST "/api/auth/login". No Login Required 
-router.post('/createuser', [
+router.post('/login', [
     body('email', 'Enter a valid Email' ).isEmail(),
     body('password', 'Password cannot be blank' ).exists() ,
 
@@ -64,5 +64,31 @@ router.post('/createuser', [
   if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() })
   }
+const{email, password} = req.body;
+try {
+    let user = await User.findOne({email})
+    if(!user){
+        return res.status(400).json({error: "Please try to login with right credentials"})
+    }
+    const passwordCompare = await bcrypt.compare(password, user.password)
+if(!passwordCompare){
+    return res.status(400).json({error: "Please try to login with right credentials"})
+}
+   
+const data = {
+        user:{
+            id: user.id
+        }
+       }
+
+ const authtoken = jwt.sign(data, JWT_SECRET)
+ res.json(authtoken)
+
+
+} catch (error) {
+    console.error(error.message)
+    res.status(500).send("Internal server error")
+}
+
 })
 module.exports = router;
