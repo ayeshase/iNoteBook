@@ -3,7 +3,7 @@ const User = require('../models/User')
 const router = express.Router();
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
-const fetchuser = require('./middleware/fetchuser')
+const fetchuser = require('../middleware/fetchuser')
 var jwt = require('jsonwebtoken');
 const JWT_SECRET = "Roomiisgeniusb$oy";
 
@@ -53,7 +53,10 @@ router.post('/createuser', [
         res.status(500).send("Internal server error")
     }
 
-})
+});
+
+
+
 //ROUTE 2: authenticate a User using: POST "/api/auth/login". No Login Required 
 router.post('/login', [
     body('email', 'Enter a valid Email').isEmail(),
@@ -90,6 +93,7 @@ router.post('/login', [
     }
 
 });
+
 
 
 //ROUTE 3: Get loggedin User Details Using: POST "/api/auth/getUser" Login required 
