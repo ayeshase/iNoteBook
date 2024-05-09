@@ -7,6 +7,7 @@ const fetchuser = require('../middleware/fetchuser')
 var jwt = require('jsonwebtoken');
 const JWT_SECRET = "Roomiisgeniusb$oy";
 
+// USER AUTHENTICATION ENDPOINTS
 //ROUTE 1: Create a User using: POST "/api/auth/createuser". No Login Required 
 router.post('/createuser', [
     body('name', 'Enter a valid name').isLength({ min: 3 }),
